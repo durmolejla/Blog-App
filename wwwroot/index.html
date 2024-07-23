@@ -1,0 +1,342 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Blog</title>
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+        }
+
+        .header {
+            display: flex;
+            font-family: "Inter", sans-serif;
+            padding-left: 2%;
+            background-color: #21a6ff;
+            animation: colorChange 3s infinite;
+        }
+
+        @keyframes colorChange {
+            0% {
+                color: #000;
+            }
+
+            75% {
+                color: #0000ff;
+            }
+
+            100% {
+                color: #000;
+            }
+        }
+
+        #headertitle {
+            padding-left: 15%;
+            font-size: 20px;
+            justify-content: center;
+            transition: font-size 0.3s ease;
+        }
+
+        .post {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 20px;
+            transition: font-size 0.3s ease;
+        }
+
+            .post:hover {
+                font-size: 24px;
+                /* Increase by 20% */
+            }
+
+        .post-title {
+            font-weight: bold;
+            font-size: 24px;
+        }
+
+        .post-content {
+            margin-top: 10px;
+        }
+
+        .post-image {
+            margin-top: 10px;
+        }
+
+            .post-image img {
+                max-width: 100%;
+                height: auto;
+            }
+
+        .post-icons {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+            .post-icons img {
+                width: 20px;
+                height: 20px;
+                cursor: pointer;
+            }
+
+        .like-count {
+            margin-left: 2px;
+            margin-right: 10px;
+        }
+
+        .view-count {
+            margin-left: auto;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .comment {
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            position: relative;
+        }
+
+            .comment img {
+                width: 20px;
+                height: 20px;
+                cursor: pointer;
+                position: absolute;
+                top: 10px;
+            }
+
+        .edit-icon {
+            right: 40px;
+        }
+
+        .delete-icon {
+            right: 10px;
+        }
+
+        .comment-form {
+            display: flex;
+            margin-top: 10px;
+        }
+
+            .comment-form input[type="text"] {
+                flex: 1;
+                /* Set input to take remaining space */
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                font-size: 16px;
+                box-sizing: border-box;
+                margin-right: 10px;
+                /* Add a margin to separate from button */
+            }
+
+        .save-button {
+            padding: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>Blog</h1>
+        <pre id="headertitle">
+            Objavi svoje ideje i misli, na svoj način!
+            Lako kreiraj unikatan blog.
+        </pre>
+    </div>
+    <hr />
+
+    <div id="posts">
+        <!-- Posts will be populated here -->
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            ucitaj(); // Load posts when the page is loaded
+        });
+
+        const ucitaj = () => {
+            fetch('http://localhost:5231/api/Objave/PrikaziUsernameUzObjave')
+                .then((response) => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Failed to fetch posts');
+                    }
+                })
+                .then((niz) => {
+                    console.log(niz);
+                    popuniPodatke(niz);
+                })
+                .catch((error) => {
+                    console.error('Error fetching posts:', error);
+                });
+        };
+
+        const popuniPodatke = (niz) => {
+            const postsContainer = document.getElementById('posts');
+            postsContainer.innerHTML = ''; // Clear previous posts if any
+
+            niz.forEach((post) => {
+                const postElement = document.createElement('div');
+                postElement.className = 'post';
+
+                const usernameElement = document.createElement('div');
+                usernameElement.className = 'post-username';
+                usernameElement.innerText = "@" + post.username; // Adding the username
+
+                const titleElement = document.createElement('div');
+                titleElement.className = 'post-title';
+                titleElement.innerText = post.naslov;
+
+                const contentElement = document.createElement('div');
+                contentElement.className = 'post-content';
+                contentElement.innerText = post.sadrzaj;
+
+                postElement.appendChild(usernameElement); // Append username before the title
+                postElement.appendChild(titleElement);
+                postElement.appendChild(contentElement);
+
+                if (post.slika) {
+                    const imageElement = document.createElement('div');
+                    imageElement.className = 'post-image';
+                    const img = document.createElement('img');
+                    img.src = `/images/${post.slika}`; // Relative path to the image
+                    img.alt = post.naslov; // Add alt attribute
+                    img.onerror = () => {
+                        console.error(`Failed to load image: ${img.src}`);
+                        img.alt = 'Image not found';
+                    };
+
+                    imageElement.appendChild(img);
+                    postElement.appendChild(imageElement);
+                }
+
+                // Add like and comment icons
+                const likeIcon = document.createElement('img');
+                likeIcon.src = '/images/like.png';
+                likeIcon.alt = 'Like';
+
+                // Create a span to display the number of likes
+                const likeCount = document.createElement('span');
+                likeCount.className = 'like-count';
+                likeCount.innerText = post.likes;
+
+                likeIcon.onclick = () => {
+                    post.likes++; // Increase the number of likes
+                    likeCount.innerText = post.likes; // Update the displayed number of likes
+                };
+
+                const commentIcon = document.createElement('img');
+                commentIcon.src = '/images/comment.png';
+                commentIcon.alt = 'Comment';
+
+                commentIcon.onclick = () => {
+                    displayCommentForm(postElement);
+                };
+
+                const postIconsContainer = document.createElement('div');
+                postIconsContainer.className = 'post-icons';
+                postIconsContainer.appendChild(likeIcon);
+                postIconsContainer.appendChild(likeCount);
+                postIconsContainer.appendChild(commentIcon);
+
+                // Create a span to display the number of views
+                const viewCount = document.createElement('span');
+                viewCount.className = 'view-count';
+                viewCount.innerText = `Views: ${post.views}`;
+
+                postIconsContainer.appendChild(viewCount);
+                postElement.appendChild(postIconsContainer);
+
+                // Append comments if they exist
+                if (post.komentari && post.komentari.length > 0) {
+                    const commentsContainer = document.createElement('div');
+                    commentsContainer.className = 'comments-container';
+
+                    post.komentari.forEach((comment) => {
+                        const commentElement = document.createElement('div');
+                        commentElement.className = 'comment';
+                        commentElement.innerText = comment.sadrzaj;
+
+                        const editIcon = document.createElement('img');
+                        editIcon.src = '/images/edit.png';
+                        editIcon.alt = 'Edit';
+                        editIcon.className = 'edit-icon';
+                        editIcon.onclick = () => {
+                            displayCommentForm(postElement, commentElement, comment.sadrzaj);
+                        };
+
+                        const deleteIcon = document.createElement('img');
+                        deleteIcon.src = '/images/delete.png';
+                        deleteIcon.alt = 'Delete';
+                        deleteIcon.className = 'delete-icon';
+                        deleteIcon.onclick = () => {
+                            commentsContainer.removeChild(commentElement);
+                        };
+
+                        commentElement.appendChild(editIcon);
+                        commentElement.appendChild(deleteIcon);
+                        commentsContainer.appendChild(commentElement);
+                    });
+
+                    postElement.appendChild(commentsContainer);
+                }
+
+                postsContainer.appendChild(postElement);
+            });
+        };
+
+        const displayCommentForm = (postElement, commentElement = null, existingContent = '') => {
+            const formContainer = document.createElement('div');
+            formContainer.className = 'comment-form';
+
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = existingContent; // Pre-fill if editing
+            formContainer.appendChild(input);
+
+            const saveButton = document.createElement('button');
+            saveButton.className = 'save-button';
+            saveButton.innerText = 'Save';
+            saveButton.onclick = () => {
+                const commentContent = input.value;
+
+                if (commentElement) {
+                    // Edit existing comment
+                    commentElement.firstChild.textContent = commentContent;
+                } else {
+                    // Add new comment
+                    const newCommentElement = document.createElement('div');
+                    newCommentElement.className = 'comment';
+                    newCommentElement.innerText = commentContent;
+
+                    const commentsContainer = postElement.querySelector('.comments-container') || document.createElement('div');
+                    commentsContainer.className = 'comments-container';
+                    commentsContainer.appendChild(newCommentElement);
+                    postElement.appendChild(commentsContainer);
+                }
+
+                formContainer.remove();
+            };
+
+            formContainer.appendChild(saveButton);
+
+            if (commentElement) {
+                commentElement.appendChild(formContainer);
+            } else {
+                postElement.appendChild(formContainer);
+            }
+        };
+    </script>
+</body>
+
+</html>

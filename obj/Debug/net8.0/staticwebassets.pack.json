@@ -1,0 +1,57 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\lejla\\source\\repos\\Blog2\\wwwroot\\images\\comment.png",
+      "PackagePath": "staticwebassets\\images\\comment.png"
+    },
+    {
+      "Id": "C:\\Users\\lejla\\source\\repos\\Blog2\\wwwroot\\images\\delete.png",
+      "PackagePath": "staticwebassets\\images\\delete.png"
+    },
+    {
+      "Id": "C:\\Users\\lejla\\source\\repos\\Blog2\\wwwroot\\images\\edit.png",
+      "PackagePath": "staticwebassets\\images\\edit.png"
+    },
+    {
+      "Id": "C:\\Users\\lejla\\source\\repos\\Blog2\\wwwroot\\images\\hobiji.jpg",
+      "PackagePath": "staticwebassets\\images\\hobiji.jpg"
+    },
+    {
+      "Id": "C:\\Users\\lejla\\source\\repos\\Blog2\\wwwroot\\images\\like.png",
+      "PackagePath": "staticwebassets\\images\\like.png"
+    },
+    {
+      "Id": "C:\\Users\\lejla\\source\\repos\\Blog2\\wwwroot\\images\\mentalno.jpg",
+      "PackagePath": "staticwebassets\\images\\mentalno.jpg"
+    },
+    {
+      "Id": "C:\\Users\\lejla\\source\\repos\\Blog2\\wwwroot\\images\\mreza.jpg",
+      "PackagePath": "staticwebassets\\images\\mreza.jpg"
+    },
+    {
+      "Id": "C:\\Users\\lejla\\source\\repos\\Blog2\\wwwroot\\images\\obaveze.jpg",
+      "PackagePath": "staticwebassets\\images\\obaveze.jpg"
+    },
+    {
+      "Id": "C:\\Users\\lejla\\source\\repos\\Blog2\\wwwroot\\index.html",
+      "PackagePath": "staticwebassets\\index.html"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.Blog2.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.Blog2.props",
+      "PackagePath": "build\\Blog2.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.Blog2.props",
+      "PackagePath": "buildMultiTargeting\\Blog2.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.Blog2.props",
+      "PackagePath": "buildTransitive\\Blog2.props"
+    }
+  ],
+  "ElementsToRemove": []
+}
